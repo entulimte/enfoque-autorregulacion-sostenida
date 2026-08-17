@@ -28,16 +28,16 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 20px 15px;
+      padding: 15px 12px;
     }
 
     .container {
       width: 100%;
-      max-width: 420px;
+      max-width: 400px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 15px;
+      gap: 12px;
     }
 
     header {
@@ -45,14 +45,14 @@
     }
 
     h1 {
-      font-size: 1.4rem;
+      font-size: 1.3rem;
       font-weight: 700;
       letter-spacing: -0.5px;
       color: var(--accent-color);
     }
 
     p.subtitle {
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       color: var(--text-muted);
       margin-top: 2px;
     }
@@ -61,11 +61,11 @@
     .controls-card {
       background: var(--card-bg);
       width: 100%;
-      padding: 15px;
-      border-radius: 16px;
+      padding: 12px;
+      border-radius: 14px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
       box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
     }
 
@@ -76,7 +76,7 @@
     }
 
     label {
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       color: var(--text-muted);
     }
 
@@ -84,9 +84,9 @@
       background: var(--bg-color);
       color: var(--text-color);
       border: 1px solid #334155;
-      padding: 8px 12px;
+      padding: 6px 10px;
       border-radius: 8px;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       outline: none;
     }
 
@@ -94,9 +94,9 @@
       background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
       color: #0f172a;
       border: none;
-      padding: 12px;
-      border-radius: 10px;
-      font-size: 1rem;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 0.95rem;
       font-weight: 700;
       cursor: pointer;
       transition: transform 0.1s ease, opacity 0.2s;
@@ -111,28 +111,40 @@
       color: #fff;
     }
 
-    /* Visor de Cámara de Guía */
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid #334155;
+      color: var(--text-muted);
+      padding: 6px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+
+    /* Visor de Cámara Compacto */
     .visor-container {
       display: flex;
-      flex-direction: column;
       align-items: center;
-      gap: 8px;
-      margin: 5px 0;
-      width: 100%;
+      gap: 12px;
+      background: var(--card-bg);
+      padding: 8px 14px;
+      border-radius: 30px;
+      border: 1px solid #334155;
     }
 
     .camera-frame {
-      width: 120px;
-      height: 120px;
+      width: 65px;
+      height: 65px;
       border-radius: 50%;
-      border: 4px solid var(--accent-color);
-      box-shadow: 0 0 20px rgba(0, 242, 254, 0.5);
+      border: 3px solid var(--accent-color);
+      box-shadow: 0 0 12px rgba(0, 242, 254, 0.4);
       overflow: hidden;
       background: #000;
       position: relative;
       display: flex;
       justify-content: center;
       align-items: center;
+      flex-shrink: 0;
     }
 
     video#camera-preview {
@@ -149,14 +161,15 @@
       align-items: center;
       justify-content: center;
       color: var(--text-muted);
-      font-size: 0.75rem;
+      font-size: 0.65rem;
       pointer-events: none;
+      text-align: center;
     }
 
     .visor-hint {
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       color: var(--text-muted);
-      text-align: center;
+      line-height: 1.2;
     }
 
     /* Métricas */
@@ -165,7 +178,7 @@
       justify-content: space-around;
       width: 100%;
       background: var(--card-bg);
-      padding: 12px;
+      padding: 10px;
       border-radius: 12px;
     }
 
@@ -174,13 +187,13 @@
     }
 
     .metric-value {
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       font-weight: 800;
       color: var(--text-color);
     }
 
     .metric-label {
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       color: var(--text-muted);
       text-transform: uppercase;
       letter-spacing: 0.5px;
@@ -190,7 +203,7 @@
     .stage-card {
       background: var(--card-bg);
       width: 100%;
-      height: 240px;
+      height: 220px;
       border-radius: 16px;
       position: relative;
       overflow: hidden;
@@ -202,7 +215,7 @@
     .zone-indicator {
       position: absolute;
       top: 10px;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       padding: 4px 10px;
       border-radius: 20px;
       background: rgba(15, 23, 42, 0.6);
@@ -210,8 +223,8 @@
     }
 
     .orb {
-      width: 65px;
-      height: 65px;
+      width: 60px;
+      height: 60px;
       border-radius: 50%;
       background: radial-gradient(circle at 30% 30%, #ffffff, var(--accent-color));
       box-shadow: 0 0 25px var(--accent-color);
@@ -232,14 +245,14 @@
       box-shadow: 0 0 20px #f43f5e;
     }
 
-    /* Modal Reporte Final */
+    /* Modal / Cuadro de Resultados */
     .modal-overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(15, 23, 42, 0.85);
+      background: rgba(15, 23, 42, 0.88);
       backdrop-filter: blur(8px);
       display: none;
       justify-content: center;
@@ -250,9 +263,9 @@
 
     .modal-card {
       background: var(--card-bg);
-      padding: 25px;
-      border-radius: 20px;
-      max-width: 360px;
+      padding: 22px;
+      border-radius: 18px;
+      max-width: 340px;
       width: 100%;
       text-align: center;
       border: 1px solid #334155;
@@ -260,15 +273,15 @@
     }
 
     .modal-title {
-      font-size: 1.3rem;
-      margin-bottom: 10px;
+      font-size: 1.2rem;
+      margin-bottom: 8px;
       color: var(--accent-color);
     }
 
     .report-stat {
-      font-size: 2.5rem;
+      font-size: 2.4rem;
       font-weight: 800;
-      margin: 15px 0;
+      margin: 12px 0;
       color: var(--text-color);
     }
 
@@ -288,33 +301,33 @@
     <!-- Controles -->
     <div class="controls-card">
       <div class="selector-group">
-        <label for="session-duration">Duración de sesión:</label>
+        <label for="session-duration">Duración:</label>
         <select id="session-duration">
-          <option value="1">1 minuto</option>
-          <option value="3">3 minutos</option>
-          <option value="5" selected>5 minutos</option>
-          <option value="10">10 minutos</option>
-          <option value="15">15 minutos</option>
-          <option value="30">30 minutos</option>
+          <option value="1">1 min</option>
+          <option value="3">3 min</option>
+          <option value="5" selected>5 min</option>
+          <option value="10">10 min</option>
+          <option value="15">15 min</option>
+          <option value="30">30 min</option>
         </select>
       </div>
 
       <button id="btn-toggle" class="btn-main">Iniciar Sesión</button>
+      <button id="btn-view-report" class="btn-secondary">Ver Último Reporte</button>
     </div>
 
-    <!-- Visor de Cámara Guía -->
+    <!-- Visor Reducido de Cámara -->
     <div class="visor-container">
       <div class="camera-frame">
         <video id="camera-preview" autoplay playsinline muted></video>
         <div id="visor-placeholder" class="visor-placeholder">
-          <span style="font-size: 1.2rem; margin-bottom:2px;">📷</span>
-          <span>VISOR DEDO</span>
+          <span>📷 DEDO</span>
         </div>
       </div>
-      <p id="visor-hint" class="visor-hint">Presiona "Iniciar Sesión" y cubre el lente con tu dedo índice</p>
+      <p id="visor-hint" class="visor-hint">Presiona "Iniciar" y tapa la cámara con tu índice.</p>
     </div>
 
-    <!-- Métricas en tiempo real -->
+    <!-- Métricas -->
     <div class="metrics-row">
       <div class="metric-box">
         <div id="bpm-display" class="metric-value">--</div>
@@ -333,18 +346,18 @@
     </div>
   </div>
 
-  <!-- Modal de Reporte -->
+  <!-- Cuadro de Resultados Modal -->
   <div id="report-modal" class="modal-overlay">
     <div class="modal-card">
-      <h2 class="modal-title">Sesión Finalizada</h2>
-      <p style="color: var(--text-muted); font-size: 0.9rem;">Porcentaje de tiempo en autorregulación (≤ 70 BPM):</p>
+      <h2 class="modal-title">Reporte de Sesión</h2>
+      <p style="color: var(--text-muted); font-size: 0.85rem;">Tiempo en autorregulación (≤ 70 BPM):</p>
       <div id="report-percentage" class="report-stat">0%</div>
-      <p id="report-summary" style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;"></p>
+      <p id="report-summary" style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 18px; line-height: 1.3;"></p>
       <button id="btn-close-modal" class="btn-main" style="width: 100%;">Aceptar</button>
     </div>
   </div>
 
-  <!-- Canvas oculto para análisis PPG -->
+  <!-- Canvas analítico PPG -->
   <canvas id="ppg-canvas" width="60" height="60"></canvas>
 
   <script>
@@ -362,14 +375,17 @@
 
     let currentBPM = 0;
     let wasOutOfZone = false;
+    let lastCalculatedPercentage = 0;
+    let lastSummaryText = "Aún no has completado una sesión de medición.";
 
-    // Buffer PPG
+    // Buffer PPG reducido a 100 elementos (~3 seg para respuesta más ágil)
     const redHistory = [];
-    const historySize = 150;
+    const historySize = 100;
     let lastBeatTime = 0;
 
     // Elementos DOM
     const btnToggle = document.getElementById('btn-toggle');
+    const btnViewReport = document.getElementById('btn-view-report');
     const selectDuration = document.getElementById('session-duration');
     const videoPreview = document.getElementById('camera-preview');
     const visorPlaceholder = document.getElementById('visor-placeholder');
@@ -386,7 +402,6 @@
     const reportSummary = document.getElementById('report-summary');
     const btnCloseModal = document.getElementById('btn-close-modal');
 
-    // Inicializar reloj
     selectDuration.addEventListener('change', () => {
       if (!isRunning) {
         totalSessionSeconds = parseInt(selectDuration.value) * 60;
@@ -409,14 +424,16 @@
       }
     });
 
+    btnViewReport.addEventListener('click', () => {
+      showReportModal();
+    });
+
     btnCloseModal.addEventListener('click', () => {
       modal.style.display = 'none';
     });
 
-    // Iniciar Sesión y Cámara
     async function startSession() {
       try {
-        // 1. Audio Context para alertas
         if (!audioCtx) {
           audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         }
@@ -424,7 +441,6 @@
           await audioCtx.resume();
         }
 
-        // 2. Acceso a Cámara
         stream = await navigator.mediaDevices.getUserMedia({
           video: { facingMode: "environment" }
         });
@@ -432,11 +448,9 @@
         videoPreview.srcObject = stream;
         await videoPreview.play();
 
-        // Ocultar placeholder del visor
         visorPlaceholder.style.display = 'none';
-        visorHint.textContent = "Cubre el lente completamente con la yema de tu dedo";
+        visorHint.textContent = "Detectando pulso... Mantén el dedo estable.";
 
-        // 3. Encender Flash/Torch sin bloquear si falla
         try {
           const track = stream.getVideoTracks()[0];
           if (track && typeof track.getCapabilities === 'function') {
@@ -445,11 +459,8 @@
               await track.applyConstraints({ advanced: [{ torch: true }] });
             }
           }
-        } catch (e) {
-          console.log("Flash no disponible en este navegador/dispositivo:", e);
-        }
+        } catch (e) {}
 
-        // Reset Métricas
         totalSessionSeconds = parseInt(selectDuration.value) * 60;
         secondsRemaining = totalSessionSeconds;
         secondsInTargetZone = 0;
@@ -460,18 +471,15 @@
         btnToggle.textContent = 'Detener Sesión';
         btnToggle.classList.add('active');
 
-        // Timers
         updateTimerDisplay();
         timerInterval = setInterval(tickTimer, 1000);
         ppgInterval = setInterval(processPPGFrame, 33);
 
       } catch (err) {
-        alert("Atención: Permite el acceso a la cámara cuando el navegador te lo solicite.");
-        console.error("Error al iniciar cámara:", err);
+        alert("Atención: Otorga permisos de cámara para continuar.");
       }
     }
 
-    // Procesamiento PPG
     function processPPGFrame() {
       if (!isRunning || videoPreview.readyState !== videoPreview.HAVE_ENOUGH_DATA) return;
 
@@ -485,9 +493,9 @@
 
       const avgRed = redSum / (frameData.length / 4);
       
-      if (avgRed < 50) {
+      if (avgRed < 45) {
         bpmDisplay.textContent = "--";
-        zoneStatus.textContent = "Cubre bien la cámara con tu dedo";
+        zoneStatus.textContent = "Coloca tu dedo cubriendo la cámara";
         return;
       }
 
@@ -497,14 +505,13 @@
       detectHeartbeat();
     }
 
-    // Detección de picos
     function detectHeartbeat() {
-      if (redHistory.length < 50) return;
+      if (redHistory.length < 35) return;
 
       const values = redHistory.map(d => d.val);
       const max = Math.max(...values);
       const min = Math.min(...values);
-      const threshold = min + (max - min) * 0.7;
+      const threshold = min + (max - min) * 0.65;
 
       const latest = redHistory[redHistory.length - 1];
       const previous = redHistory[redHistory.length - 2];
@@ -515,7 +522,7 @@
           const delta = now - lastBeatTime;
           if (delta > 450 && delta < 1300) {
             const instantBPM = Math.round(60000 / delta);
-            currentBPM = currentBPM === 0 ? instantBPM : Math.round(currentBPM * 0.7 + instantBPM * 0.3);
+            currentBPM = currentBPM === 0 ? instantBPM : Math.round(currentBPM * 0.6 + instantBPM * 0.4);
             updateBiofeedbackUI(currentBPM);
           }
         }
@@ -552,14 +559,14 @@
         osc.type = 'sine';
         osc.frequency.setValueAtTime(380, audioCtx.currentTime);
         
-        gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+        gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
 
         osc.connect(gain);
         gain.connect(audioCtx.destination);
 
         osc.start();
-        osc.stop(audioCtx.currentTime + 0.5);
+        osc.stop(audioCtx.currentTime + 0.4);
       } catch(e) {}
     }
 
@@ -593,22 +600,24 @@
       btnToggle.textContent = 'Iniciar Sesión';
       btnToggle.classList.remove('active');
       visorPlaceholder.style.display = 'flex';
-      visorHint.textContent = 'Presiona "Iniciar Sesión" y cubre el lente con tu dedo índice';
+      visorHint.textContent = 'Presiona "Iniciar" y tapa la cámara con tu índice.';
       bioOrb.className = "orb";
       bpmDisplay.textContent = "--";
 
-      if (completed || totalMeasuredSeconds > 10) {
-        showReport();
+      // Calcular y guardar resultados
+      if (totalMeasuredSeconds > 0) {
+        lastCalculatedPercentage = Math.round((secondsInTargetZone / totalMeasuredSeconds) * 100);
+        lastSummaryText = `Mantuviste la frecuencia en ≤70 BPM durante ${secondsInTargetZone} de ${totalMeasuredSeconds} segundos medidos.`;
+      }
+
+      if (completed || totalMeasuredSeconds >= 5) {
+        showReportModal();
       }
     }
 
-    function showReport() {
-      const percentage = totalMeasuredSeconds > 0 
-        ? Math.round((secondsInTargetZone / totalMeasuredSeconds) * 100) 
-        : 0;
-
-      reportPercentage.textContent = `${percentage}%`;
-      reportSummary.textContent = `Mantuviste la frecuencia en ≤70 BPM durante ${secondsInTargetZone} de los ${totalMeasuredSeconds} segundos evaluados.`;
+    function showReportModal() {
+      reportPercentage.textContent = `${lastCalculatedPercentage}%`;
+      reportSummary.textContent = lastSummaryText;
       modal.style.display = 'flex';
     }
   </script>

@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biofeedback: Autorregulación Sostenida</title>
+  <style>
+    :root {
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --accent-success: #38bdf8;
+      --accent-warning: #f43f5e;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 500px;
+      background-color: var(--card-bg);
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    h1 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      letter-spacing: -0.02em;
+    }
+
+    p.subtitle {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    /* Controls Panel */
+    .setup-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .control-group {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 12px 16px;
+      border-radius: 12px;
+    }
+
+    label {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    select, input[type="number"] {
+      background: #0f172a;
+      border: 1px solid #334155;
+      color: var(--text-main);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    button.btn-primary {
+      background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+      color: white;
+      border: none;
+      padding: 14px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.1s ease, opacity 0.2s;
+      width: 100%;
+    }
+
+    button.btn-primary:active {
+      transform: scale(0.98);
+    }
+
+    /* Scene / Floating Orb Display */
+    .stage {
+      height: 280px;
+      width: 100%;
+      background: radial-gradient(circle at center, rgba(56, 189, 248, 0.05) 0%, rgba(15, 23, 42, 0.4) 100%);
+      border-radius: 16px;
+      position: relative;
+      margin: 20px 0;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      justify-content: center;
+    }
+
+    .floor {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 12px;
+      background: rgba(255, 255, 255, 0.1);
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .orb {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #7dd3fc, #0284c7);
+      box-shadow: 0 0 25px rgba(56, 189, 248, 0.6);
+      position: absolute;
+      bottom: 20px;
+      transition: bottom 1.2s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.8s, box-shadow 0.8s;
+    }
+
+    /* Orb States */
+    .orb.floating {
+      bottom: 160px;
+      background: radial-gradient(circle at 35% 35%, #e0f2fe, #38bdf8);
+      box-shadow: 0 0 35px rgba(56, 189, 248, 0.9);
+      animation: floatMotion 3s ease-in-out infinite alternate;
+    }
+
+    .orb.dropped {
+      bottom: 15px;
+      background: radial-gradient(circle at 35% 35%, #fca5a5, #f43f5e);
+      box-shadow: 0 0 15px rgba(244, 63, 94, 0.4);
+    }
+
+    @keyframes floatMotion {
+      0% { transform: translateY(0px); }
+      100% { transform: translateY(-12px); }
+    }
+
+    /* Live Telemetry Display */
+    .telemetry {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 10px;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 12px;
+      border-radius: 12px;
+    }
+
+    .metric-title {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .metric-value {
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+
+    /* Final Report Section */
+    .report-screen {
+      display: none;
+    }
+
+    .summary-card {
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 16px;
+      padding: 16px;
+      margin: 16px 0;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .comparison-bar {
+      height: 20px;
+      width: 100%;
+      background: #334155;
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      margin: 12px 0;
+    }
+
+    .bar-zone {
+      background: #38bdf8;
+      height: 100%;
+      transition: width 0.5s ease;
+    }
+
+    .bar-off-zone {
+      background: #f43f5e;
+      height: 100%;
+      transition: width 0.5s ease;
+    }
+
+    .legend {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+    }
+
+    .dot {
+      height: 10px;
+      width: 10px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 4px;
+    }
+
+    .dot-zone { background: #38bdf8; }
+    .dot-off { background: #f43f5e; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Active Session View -->
+    <div id="sessionView">
+      <h1>Autorregulación Sostenida</h1>
+      <p class="subtitle">Mantén tu pulso en ≤ 70 LPM para mantener la esfera flotando</p>
+
+      <div class="setup-panel" id="setupControls">
+        <div class="control-group">
+          <label for="timeSelect">Tiempo de sesión:</label>
+          <select id="timeSelect">
+            <script>
+              for(let i=1; i<=30; i++) {
+                document.write(`<option value="${i}">${i} min${i>1?'s':''}</option>`);
+              }
+            </script>
+          </select>
+        </div>
+        <button class="btn-primary" id="startBtn">Iniciar Entrenamiento</button>
+      </div>
+
+      <div class="stage">
+        <div class="orb" id="orb"></div>
+        <div class="floor"></div>
+      </div>
+
+      <div class="telemetry">
+        <div>
+          <div class="metric-title">Frecuencia</div>
+          <div class="metric-value" id="bpmDisplay">-- <span style="font-size:0.8rem">LPM</span></div>
+        </div>
+        <div>
+          <div class="metric-title">Tiempo Restante</div>
+          <div class="metric-value" id="timerDisplay">00:00</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Final Report View -->
+    <div id="reportView" class="report-screen">
+      <h1>Resumen de Sesión</h1>
+      <p class="subtitle">Evaluación de Atención e Inserción Parasimpática</p>
+
+      <div class="summary-card">
+        <div class="legend">
+          <span><span class="dot dot-zone"></span>En Zona (≤ 70 LPM): <strong id="inZonePct">0%</strong></span>
+          <span><span class="dot dot-off"></span>Fuera de Zona: <strong id="outZonePct">0%</strong></span>
+        </div>
+        
+        <div class="comparison-bar">
+          <div class="bar-zone" id="barInZone" style="width: 0%;"></div>
+          <div class="bar-off-zone" id="barOutZone" style="width: 0%;"></div>
+        </div>
+
+        <div style="margin-top: 14px; text-align: left; font-size: 0.85rem; color: #94a3b8; line-height: 1.4;">
+          <p>• <strong>Tiempo Total:</strong> <span id="totalTimeText"></span></p>
+          <p>• <strong>Tiempo Sostenido en Zona:</strong> <span id="inZoneTimeText"></span></p>
+        </div>
+      </div>
+
+      <button class="btn-primary" id="restartBtn">Nueva Sesión</button>
+    </div>
+  </div>
+
+  <script>
+    // System State Variables
+    let sessionTimer = null;
+    let telemetryTimer = null;
+    let totalDurationSeconds = 0;
+    let remainingSeconds = 0;
+    let secondsInZone = 0;
+    let currentBpm = 72;
+    let wasInZone = false;
+
+    // Web Audio API Context
+    let audioCtx = null;
+
+    function playSoftWarningSound() {
+      try {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(520, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(440, audioCtx.currentTime + 0.4);
+
+        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.4);
+      } catch (e) {
+        console.log("Audio not allowed yet");
+      }
+    }
+
+    // DOM Elements
+    const startBtn = document.getElementById('startBtn');
+    const restartBtn = document.getElementById('restartBtn');
+    const setupControls = document.getElementById('setupControls');
+    const orb = document.getElementById('orb');
+    const bpmDisplay = document.getElementById('bpmDisplay');
+    const timerDisplay = document.getElementById('timerDisplay');
+    const sessionView = document.getElementById('sessionView');
+    const reportView = document.getElementById('reportView');
+
+    // Start Session
+    startBtn.addEventListener('click', () => {
+      const minutes = parseInt(document.getElementById('timeSelect').value);
+      totalDurationSeconds = minutes * 60;
+      remainingSeconds = totalDurationSeconds;
+      secondsInZone = 0;
+      wasInZone = false;
+
+      setupControls.style.display = 'none';
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+      startTimers();
+    });
+
+    function startTimers() {
+      sessionTimer = setInterval(() => {
+        remainingSeconds--;
+        updateTimerDisplay();
+
+        if (remainingSeconds <= 0) {
+          endSession();
+        }
+      }, 1000);
+
+      telemetryTimer = setInterval(() => {
+        simulatePulseReading();
+
+        const isInZone = currentBpm <= 70;
+
+        if (isInZone) {
+          secondsInZone++;
+          orb.className = "orb floating";
+        } else {
+          orb.className = "orb dropped";
+          if (wasInZone) {
+            playSoftWarningSound();
+          }
+        }
+
+        wasInZone = isInZone;
+        bpmDisplay.innerHTML = `${currentBpm} <span style="font-size:0.8rem">LPM</span>`;
+      }, 1000);
+    }
+
+    function simulatePulseReading() {
+      const delta = (Math.random() - 0.5) * 4;
+      currentBpm = Math.round(Math.min(Math.max(currentBpm + delta, 58), 88));
+    }
+
+    function updateTimerDisplay() {
+      const m = Math.floor(remainingSeconds / 60).toString().padStart(2, '0');
+      const s = (remainingSeconds % 60).toString().padStart(2, '0');
+      timerDisplay.textContent = `${m}:${s}`;
+    }
+
+    function endSession() {
+      clearInterval(sessionTimer);
+      clearInterval(telemetryTimer);
+
+      const inZonePct = Math.round((secondsInZone / totalDurationSeconds) * 100);
+      const outZonePct = 100 - inZonePct;
+
+      document.getElementById('inZonePct').textContent = `${inZonePct}%`;
+      document.getElementById('outZonePct').textContent = `${outZonePct}%`;
+      document.getElementById('barInZone').style.width = `${inZonePct}%`;
+      document.getElementById('barOutZone').style.width = `${outZonePct}%`;
+
+      document.getElementById('totalTimeText').textContent = `${Math.floor(totalDurationSeconds / 60)} min(s)`;
+      document.getElementById('inZoneTimeText').textContent = `${Math.floor(secondsInZone / 60)}m ${secondsInZone % 60}s`;
+
+      sessionView.style.display = 'none';
+      reportView.style.display = 'block';
+    }
+
+    restartBtn.addEventListener('click', () => {
+      reportView.style.display = 'none';
+      sessionView.style.display = 'block';
+      setupControls.style.display = 'flex';
+      orb.className = "orb";
+      bpmDisplay.innerHTML = `-- <span style="font-size:0.8rem">LPM</span>`;
+      timerDisplay.textContent = "00:00";
+    });
+  </script>
+</body>
+</html>

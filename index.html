@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Biofeedback - Autorregulación Sostenida</title>
   <style>
     :root {
@@ -21,89 +21,69 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
 
-    body {
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden; /* Elimina el scroll en el teléfono */
       background-color: var(--bg-color);
       color: var(--text-color);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 15px 12px;
     }
 
-    .container {
-      width: 100%;
-      max-width: 400px;
+    body {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      gap: 12px;
+      justify-content: space-between;
+      padding: 10px 12px;
     }
 
+    /* Header Compacto */
     header {
-      text-align: center;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 5px;
+      border-bottom: 1px solid #334155;
     }
 
     h1 {
-      font-size: 1.3rem;
+      font-size: 1.05rem;
       font-weight: 700;
-      letter-spacing: -0.5px;
       color: var(--accent-color);
     }
 
-    p.subtitle {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-
-    /* Controles de Sesión */
-    .controls-card {
-      background: var(--card-bg);
-      width: 100%;
-      padding: 12px;
-      border-radius: 14px;
+    /* Barra Superior Compacta (Controles + Visor Dedo) */
+    .top-bar {
       display: flex;
-      flex-direction: column;
-      gap: 10px;
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 5px;
     }
 
     .selector-group {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-    }
-
-    label {
-      font-size: 0.85rem;
-      color: var(--text-muted);
+      gap: 5px;
     }
 
     select {
-      background: var(--bg-color);
+      background: var(--card-bg);
       color: var(--text-color);
       border: 1px solid #334155;
-      padding: 6px 10px;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      outline: none;
+      padding: 5px;
+      border-radius: 6px;
+      font-size: 0.8rem;
     }
 
     .btn-main {
       background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
       color: #0f172a;
       border: none;
-      padding: 10px;
+      padding: 8px 12px;
       border-radius: 8px;
-      font-size: 0.95rem;
+      font-size: 0.85rem;
       font-weight: 700;
       cursor: pointer;
-      transition: transform 0.1s ease, opacity 0.2s;
-    }
-
-    .btn-main:active {
-      transform: scale(0.98);
     }
 
     .btn-main.active {
@@ -111,39 +91,15 @@
       color: #fff;
     }
 
-    .btn-secondary {
-      background: transparent;
-      border: 1px solid #334155;
-      color: var(--text-muted);
-      padding: 6px;
-      border-radius: 8px;
-      font-size: 0.8rem;
-      cursor: pointer;
-    }
-
-    /* Visor de Cámara Compacto */
-    .visor-container {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: var(--card-bg);
-      padding: 8px 14px;
-      border-radius: 30px;
-      border: 1px solid #334155;
-    }
-
-    .camera-frame {
-      width: 65px;
-      height: 65px;
+    /* Visor Micro para el Dedo */
+    .mini-visor {
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
-      border: 3px solid var(--accent-color);
-      box-shadow: 0 0 12px rgba(0, 242, 254, 0.4);
+      border: 2px solid var(--accent-color);
       overflow: hidden;
       background: #000;
       position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
       flex-shrink: 0;
     }
 
@@ -151,138 +107,89 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      display: block;
     }
 
-    .visor-placeholder {
-      position: absolute;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      color: var(--text-muted);
-      font-size: 0.65rem;
-      pointer-events: none;
-      text-align: center;
-    }
-
-    .visor-hint {
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      line-height: 1.2;
-    }
-
-    /* Métricas */
-    .metrics-row {
-      display: flex;
-      justify-content: space-around;
-      width: 100%;
-      background: var(--card-bg);
-      padding: 10px;
-      border-radius: 12px;
-    }
-
-    .metric-box {
-      text-align: center;
-    }
-
-    .metric-value {
-      font-size: 1.4rem;
-      font-weight: 800;
-      color: var(--text-color);
-    }
-
-    .metric-label {
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    /* Esfera de Biofeedback */
+    /* Escenario Central del Biofeedback (Esfera) */
     .stage-card {
       background: var(--card-bg);
       width: 100%;
-      height: 220px;
+      flex-grow: 1;
+      margin: 8px 0;
       border-radius: 16px;
       position: relative;
       overflow: hidden;
       display: flex;
       justify-content: center;
+      align-items: center;
       border: 1px solid #334155;
     }
 
     .zone-indicator {
       position: absolute;
       top: 10px;
-      font-size: 0.78rem;
+      font-size: 0.75rem;
+      font-weight: 600;
       padding: 4px 10px;
-      border-radius: 20px;
-      background: rgba(15, 23, 42, 0.6);
+      border-radius: 12px;
+      background: rgba(15, 23, 42, 0.7);
       backdrop-filter: blur(4px);
+      text-align: center;
     }
 
     .orb {
-      width: 60px;
-      height: 60px;
+      width: 75px;
+      height: 75px;
       border-radius: 50%;
       background: radial-gradient(circle at 30% 30%, #ffffff, var(--accent-color));
       box-shadow: 0 0 25px var(--accent-color);
       position: absolute;
-      top: 70%;
+      top: 65%;
       transition: top 0.8s cubic-bezier(0.4, 0, 0.2, 1), background 0.5s, box-shadow 0.5s;
     }
 
     .orb.floating {
-      top: 20%;
+      top: 25%;
       background: radial-gradient(circle at 30% 30%, #ffffff, #00f2fe);
-      box-shadow: 0 0 30px #00f2fe;
+      box-shadow: 0 0 35px #00f2fe;
     }
 
     .orb.dropping {
-      top: 75%;
+      top: 70%;
       background: radial-gradient(circle at 30% 30%, #ffffff, #f43f5e);
       box-shadow: 0 0 20px #f43f5e;
     }
 
-    /* Modal / Cuadro de Resultados */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
+    /* Panel Inferior con Resultados en Tiempo Real */
+    .bottom-panel {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1.2fr;
+      gap: 8px;
       width: 100%;
-      height: 100%;
-      background: rgba(15, 23, 42, 0.88);
-      backdrop-filter: blur(8px);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 100;
-      padding: 20px;
     }
 
-    .modal-card {
+    .result-box {
       background: var(--card-bg);
-      padding: 22px;
-      border-radius: 18px;
-      max-width: 340px;
-      width: 100%;
+      padding: 8px;
+      border-radius: 10px;
       text-align: center;
       border: 1px solid #334155;
-      box-shadow: 0 20px 30px rgba(0,0,0,0.5);
     }
 
-    .modal-title {
-      font-size: 1.2rem;
-      margin-bottom: 8px;
+    .result-value {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--text-color);
+    }
+
+    .result-value.accent {
       color: var(--accent-color);
     }
 
-    .report-stat {
-      font-size: 2.4rem;
-      font-weight: 800;
-      margin: 12px 0;
-      color: var(--text-color);
+    .result-label {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-top: 2px;
     }
 
     canvas#ppg-canvas {
@@ -292,76 +199,58 @@
 </head>
 <body>
 
-  <div class="container">
-    <header>
-      <h1>Autorregulación Sostenida</h1>
-      <p class="subtitle">Biofeedback Cardio-Atencional</p>
-    </header>
+  <!-- Header -->
+  <header>
+    <h1>Autorregulación Sostenida</h1>
+    <span style="font-size:0.7rem; color:var(--text-muted)">Biofeedback Cardio-Atencional</span>
+  </header>
 
-    <!-- Controles -->
-    <div class="controls-card">
-      <div class="selector-group">
-        <label for="session-duration">Duración:</label>
-        <select id="session-duration">
-          <option value="1">1 min</option>
-          <option value="3">3 min</option>
-          <option value="5" selected>5 min</option>
-          <option value="10">10 min</option>
-          <option value="15">15 min</option>
-          <option value="30">30 min</option>
-        </select>
-      </div>
-
-      <button id="btn-toggle" class="btn-main">Iniciar Sesión</button>
-      <button id="btn-view-report" class="btn-secondary">Ver Último Reporte</button>
+  <!-- Controles Compactos Superiores -->
+  <div class="top-bar">
+    <div class="selector-group">
+      <select id="session-duration">
+        <option value="1">1 min</option>
+        <option value="3">3 min</option>
+        <option value="5" selected>5 min</option>
+        <option value="10">10 min</option>
+      </select>
     </div>
 
-    <!-- Visor Reducido de Cámara -->
-    <div class="visor-container">
-      <div class="camera-frame">
-        <video id="camera-preview" autoplay playsinline muted></video>
-        <div id="visor-placeholder" class="visor-placeholder">
-          <span>📷 DEDO</span>
-        </div>
-      </div>
-      <p id="visor-hint" class="visor-hint">Presiona "Iniciar" y tapa la cámara con tu índice.</p>
-    </div>
+    <button id="btn-toggle" class="btn-main">Iniciar</button>
 
-    <!-- Métricas -->
-    <div class="metrics-row">
-      <div class="metric-box">
-        <div id="bpm-display" class="metric-value">--</div>
-        <div class="metric-label">BPM Actual</div>
-      </div>
-      <div class="metric-box">
-        <div id="timer-display" class="metric-value">05:00</div>
-        <div class="metric-label">Tiempo</div>
-      </div>
-    </div>
-
-    <!-- Escenario de la Esfera -->
-    <div class="stage-card">
-      <div id="zone-status" class="zone-indicator">Zona Objetivo: ≤ 70 BPM</div>
-      <div id="bio-orb" class="orb"></div>
+    <!-- Visor Dedo Ultra Compacto -->
+    <div class="mini-visor" title="Coloca tu dedo aquí sobre la cámara tras la funda">
+      <video id="camera-preview" autoplay playsinline muted></video>
     </div>
   </div>
 
-  <!-- Cuadro de Resultados Modal -->
-  <div id="report-modal" class="modal-overlay">
-    <div class="modal-card">
-      <h2 class="modal-title">Reporte de Sesión</h2>
-      <p style="color: var(--text-muted); font-size: 0.85rem;">Tiempo en autorregulación (≤ 70 BPM):</p>
-      <div id="report-percentage" class="report-stat">0%</div>
-      <p id="report-summary" style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 18px; line-height: 1.3;"></p>
-      <button id="btn-close-modal" class="btn-main" style="width: 100%;">Aceptar</button>
+  <!-- Escenario Principal (Esfera Flotante) -->
+  <div class="stage-card">
+    <div id="zone-status" class="zone-indicator">Zona: ≤ 70 BPM (Atención Interna Estrecha)</div>
+    <div id="bio-orb" class="orb"></div>
+  </div>
+
+  <!-- Panel Inferior de Resultados en Tiempo Real -->
+  <div class="bottom-panel">
+    <div class="result-box">
+      <div id="bpm-display" class="result-value">--</div>
+      <div class="result-label">BPM Actual</div>
+    </div>
+
+    <div class="result-box">
+      <div id="timer-display" class="result-value">05:00</div>
+      <div class="result-label">Tiempo</div>
+    </div>
+
+    <div class="result-box">
+      <div id="target-percent-display" class="result-value accent">0%</div>
+      <div class="result-label">% En Zona</div>
     </div>
   </div>
 
-  <!-- Canvas analítico PPG -->
   <canvas id="ppg-canvas" width="60" height="60"></canvas>
 
   <script>
-    // Variables de Estado
     let isRunning = false;
     let stream = null;
     let audioCtx = null;
@@ -375,32 +264,21 @@
 
     let currentBPM = 0;
     let wasOutOfZone = false;
-    let lastCalculatedPercentage = 0;
-    let lastSummaryText = "Aún no has completado una sesión de medición.";
 
-    // Buffer PPG reducido a 100 elementos (~3 seg para respuesta más ágil)
     const redHistory = [];
-    const historySize = 100;
+    const historySize = 90; // ~3 seg de búfer
     let lastBeatTime = 0;
 
-    // Elementos DOM
     const btnToggle = document.getElementById('btn-toggle');
-    const btnViewReport = document.getElementById('btn-view-report');
     const selectDuration = document.getElementById('session-duration');
     const videoPreview = document.getElementById('camera-preview');
-    const visorPlaceholder = document.getElementById('visor-placeholder');
-    const visorHint = document.getElementById('visor-hint');
     const bpmDisplay = document.getElementById('bpm-display');
     const timerDisplay = document.getElementById('timer-display');
+    const targetPercentDisplay = document.getElementById('target-percent-display');
     const bioOrb = document.getElementById('bio-orb');
     const zoneStatus = document.getElementById('zone-status');
     const canvas = document.getElementById('ppg-canvas');
     const ctx = canvas.getContext('2d', { willReadFrequently: true });
-
-    const modal = document.getElementById('report-modal');
-    const reportPercentage = document.getElementById('report-percentage');
-    const reportSummary = document.getElementById('report-summary');
-    const btnCloseModal = document.getElementById('btn-close-modal');
 
     selectDuration.addEventListener('change', () => {
       if (!isRunning) {
@@ -420,16 +298,8 @@
       if (!isRunning) {
         startSession();
       } else {
-        stopSession(false);
+        stopSession();
       }
-    });
-
-    btnViewReport.addEventListener('click', () => {
-      showReportModal();
-    });
-
-    btnCloseModal.addEventListener('click', () => {
-      modal.style.display = 'none';
     });
 
     async function startSession() {
@@ -448,9 +318,6 @@
         videoPreview.srcObject = stream;
         await videoPreview.play();
 
-        visorPlaceholder.style.display = 'none';
-        visorHint.textContent = "Detectando pulso... Mantén el dedo estable.";
-
         try {
           const track = stream.getVideoTracks()[0];
           if (track && typeof track.getCapabilities === 'function') {
@@ -468,15 +335,17 @@
         wasOutOfZone = false;
         
         isRunning = true;
-        btnToggle.textContent = 'Detener Sesión';
+        btnToggle.textContent = 'Detener';
         btnToggle.classList.add('active');
 
         updateTimerDisplay();
+        targetPercentDisplay.textContent = "0%";
+        
         timerInterval = setInterval(tickTimer, 1000);
         ppgInterval = setInterval(processPPGFrame, 33);
 
       } catch (err) {
-        alert("Atención: Otorga permisos de cámara para continuar.");
+        alert("Otorga permisos de cámara para ejecutar la evaluación.");
       }
     }
 
@@ -495,7 +364,7 @@
       
       if (avgRed < 45) {
         bpmDisplay.textContent = "--";
-        zoneStatus.textContent = "Coloca tu dedo cubriendo la cámara";
+        zoneStatus.textContent = "Coloca el dedo cubriendo lente y flash";
         return;
       }
 
@@ -506,7 +375,7 @@
     }
 
     function detectHeartbeat() {
-      if (redHistory.length < 35) return;
+      if (redHistory.length < 30) return;
 
       const values = redHistory.map(d => d.val);
       const max = Math.max(...values);
@@ -535,12 +404,12 @@
 
       if (bpm <= 70) {
         bioOrb.className = "orb floating";
-        zoneStatus.textContent = "Autorregulación Sostenida (En Zona)";
+        zoneStatus.textContent = "En Zona: ≤ 70 BPM (Atención Interna Estrecha)";
         zoneStatus.style.color = "#00f2fe";
         wasOutOfZone = false;
       } else {
         bioOrb.className = "orb dropping";
-        zoneStatus.textContent = "Frecuencia Elevada (> 70 BPM)";
+        zoneStatus.textContent = "Fuera de Zona: > 70 BPM";
         zoneStatus.style.color = "#f43f5e";
 
         if (!wasOutOfZone) {
@@ -580,14 +449,20 @@
         secondsInTargetZone++;
       }
 
+      // Actualizar % en zona en vivo abajo
+      if (totalMeasuredSeconds > 0) {
+        const pct = Math.round((secondsInTargetZone / totalMeasuredSeconds) * 100);
+        targetPercentDisplay.textContent = `${pct}%`;
+      }
+
       updateTimerDisplay();
 
       if (secondsRemaining <= 0) {
-        stopSession(true);
+        stopSession();
       }
     }
 
-    function stopSession(completed = false) {
+    function stopSession() {
       isRunning = false;
       clearInterval(timerInterval);
       clearInterval(ppgInterval);
@@ -597,28 +472,12 @@
         stream = null;
       }
 
-      btnToggle.textContent = 'Iniciar Sesión';
+      btnToggle.textContent = 'Iniciar';
       btnToggle.classList.remove('active');
-      visorPlaceholder.style.display = 'flex';
-      visorHint.textContent = 'Presiona "Iniciar" y tapa la cámara con tu índice.';
       bioOrb.className = "orb";
       bpmDisplay.textContent = "--";
-
-      // Calcular y guardar resultados
-      if (totalMeasuredSeconds > 0) {
-        lastCalculatedPercentage = Math.round((secondsInTargetZone / totalMeasuredSeconds) * 100);
-        lastSummaryText = `Mantuviste la frecuencia en ≤70 BPM durante ${secondsInTargetZone} de ${totalMeasuredSeconds} segundos medidos.`;
-      }
-
-      if (completed || totalMeasuredSeconds >= 5) {
-        showReportModal();
-      }
-    }
-
-    function showReportModal() {
-      reportPercentage.textContent = `${lastCalculatedPercentage}%`;
-      reportSummary.textContent = lastSummaryText;
-      modal.style.display = 'flex';
+      zoneStatus.textContent = "Zona: ≤ 70 BPM (Atención Interna Estrecha)";
+      zoneStatus.style.color = "#f8fafc";
     }
   </script>
 </body>

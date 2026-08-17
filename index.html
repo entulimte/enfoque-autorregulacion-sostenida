@@ -111,34 +111,50 @@
       color: #fff;
     }
 
-    /* Visor de Cámara y Flash */
+    /* Visor de Cámara de Guía */
     .visor-container {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
       margin: 5px 0;
+      width: 100%;
     }
 
     .camera-frame {
-      width: 110px;
-      height: 110px;
+      width: 120px;
+      height: 120px;
       border-radius: 50%;
-      border: 3px solid var(--accent-color);
-      box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+      border: 4px solid var(--accent-color);
+      box-shadow: 0 0 20px rgba(0, 242, 254, 0.5);
       overflow: hidden;
       background: #000;
       position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     video#camera-preview {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      display: block;
+    }
+
+    .visor-placeholder {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      pointer-events: none;
     }
 
     .visor-hint {
-      font-size: 0.78rem;
+      font-size: 0.8rem;
       color: var(--text-muted);
       text-align: center;
     }
@@ -200,18 +216,18 @@
       background: radial-gradient(circle at 30% 30%, #ffffff, var(--accent-color));
       box-shadow: 0 0 25px var(--accent-color);
       position: absolute;
-      top: 70%; /* Posición por defecto abajo */
+      top: 70%;
       transition: top 0.8s cubic-bezier(0.4, 0, 0.2, 1), background 0.5s, box-shadow 0.5s;
     }
 
     .orb.floating {
-      top: 20%; /* Eleva a la zona alta */
+      top: 20%;
       background: radial-gradient(circle at 30% 30%, #ffffff, #00f2fe);
       box-shadow: 0 0 30px #00f2fe;
     }
 
     .orb.dropping {
-      top: 75%; /* Cae */
+      top: 75%;
       background: radial-gradient(circle at 30% 30%, #ffffff, #f43f5e);
       box-shadow: 0 0 20px #f43f5e;
     }
@@ -279,7 +295,6 @@
           <option value="5" selected>5 minutos</option>
           <option value="10">10 minutos</option>
           <option value="15">15 minutos</option>
-          <option value="20">20 minutos</option>
           <option value="30">30 minutos</option>
         </select>
       </div>
@@ -287,12 +302,16 @@
       <button id="btn-toggle" class="btn-main">Iniciar Sesión</button>
     </div>
 
-    <!-- Visor Cámara -->
+    <!-- Visor de Cámara Guía -->
     <div class="visor-container">
       <div class="camera-frame">
         <video id="camera-preview" autoplay playsinline muted></video>
+        <div id="visor-placeholder" class="visor-placeholder">
+          <span style="font-size: 1.2rem; margin-bottom:2px;">📷</span>
+          <span>VISOR DEDO</span>
+        </div>
       </div>
-      <p class="visor-hint">Cubre el lente y el flash completamente con tu dedo</p>
+      <p id="visor-hint" class="visor-hint">Presiona "Iniciar Sesión" y cubre el lente con tu dedo índice</p>
     </div>
 
     <!-- Métricas en tiempo real -->
@@ -346,13 +365,15 @@
 
     // Buffer PPG
     const redHistory = [];
-    const historySize = 150; // ~5 segundos a 30fps
+    const historySize = 150;
     let lastBeatTime = 0;
 
     // Elementos DOM
     const btnToggle = document.getElementById('btn-toggle');
     const selectDuration = document.getElementById('session-duration');
     const videoPreview = document.getElementById('camera-preview');
+    const visorPlaceholder = document.getElementById('visor-placeholder');
+    const visorHint = document.getElementById('visor-hint');
     const bpmDisplay = document.getElementById('bpm-display');
     const timerDisplay = document.getElementById('timer-display');
     const bioOrb = document.getElementById('bio-orb');
@@ -365,7 +386,7 @@
     const reportSummary = document.getElementById('report-summary');
     const btnCloseModal = document.getElementById('btn-close-modal');
 
-    // Inicializar reloj selector
+    // Inicializar reloj
     selectDuration.addEventListener('change', () => {
       if (!isRunning) {
         totalSessionSeconds = parseInt(selectDuration.value) * 60;
@@ -380,7 +401,6 @@
       timerDisplay.textContent = `${mins}:${secs}`;
     }
 
-    // Toggle Iniciar / Detener
     btnToggle.addEventListener('click', () => {
       if (!isRunning) {
         startSession();
@@ -393,7 +413,7 @@
       modal.style.display = 'none';
     });
 
-    // Iniciar Sesión
+    // Iniciar Sesión y Cámara
     async function startSession() {
       try {
         // 1. Audio Context para alertas
@@ -404,23 +424,29 @@
           await audioCtx.resume();
         }
 
-        // 2. Encender Cámara y Flash
+        // 2. Acceso a Cámara
         stream = await navigator.mediaDevices.getUserMedia({
-          video: {
-            facingMode: { ideal: "environment" },
-            width: { ideal: 160 },
-            height: { ideal: 160 }
-          }
+          video: { facingMode: "environment" }
         });
 
         videoPreview.srcObject = stream;
         await videoPreview.play();
 
-        // Intentar encender el flash (Torch)
-        const track = stream.getVideoTracks()[0];
-        const capabilities = track.getCapabilities ? track.getCapabilities() : {};
-        if (capabilities.torch) {
-          await track.applyConstraints({ advanced: [{ torch: true }] });
+        // Ocultar placeholder del visor
+        visorPlaceholder.style.display = 'none';
+        visorHint.textContent = "Cubre el lente completamente con la yema de tu dedo";
+
+        // 3. Encender Flash/Torch sin bloquear si falla
+        try {
+          const track = stream.getVideoTracks()[0];
+          if (track && typeof track.getCapabilities === 'function') {
+            const capabilities = track.getCapabilities();
+            if (capabilities.torch) {
+              await track.applyConstraints({ advanced: [{ torch: true }] });
+            }
+          }
+        } catch (e) {
+          console.log("Flash no disponible en este navegador/dispositivo:", e);
         }
 
         // Reset Métricas
@@ -437,15 +463,15 @@
         // Timers
         updateTimerDisplay();
         timerInterval = setInterval(tickTimer, 1000);
-        ppgInterval = setInterval(processPPGFrame, 33); // ~30 fps
+        ppgInterval = setInterval(processPPGFrame, 33);
 
       } catch (err) {
-        alert("Permiso de cámara denegado o flash no soportado.");
-        console.error(err);
+        alert("Atención: Permite el acceso a la cámara cuando el navegador te lo solicite.");
+        console.error("Error al iniciar cámara:", err);
       }
     }
 
-    // Procesamiento PPG por Cámara
+    // Procesamiento PPG
     function processPPGFrame() {
       if (!isRunning || videoPreview.readyState !== videoPreview.HAVE_ENOUGH_DATA) return;
 
@@ -454,15 +480,14 @@
 
       let redSum = 0;
       for (let i = 0; i < frameData.length; i += 4) {
-        redSum += frameData[i]; // Canal Rojo
+        redSum += frameData[i];
       }
 
       const avgRed = redSum / (frameData.length / 4);
       
-      // Validar si el dedo cubre la cámara (el canal rojo debe ser dominante)
-      if (avgRed < 60) {
+      if (avgRed < 50) {
         bpmDisplay.textContent = "--";
-        zoneStatus.textContent = "Coloca tu dedo sobre la cámara";
+        zoneStatus.textContent = "Cubre bien la cámara con tu dedo";
         return;
       }
 
@@ -472,9 +497,9 @@
       detectHeartbeat();
     }
 
-    // Detección simple de picos para BPM
+    // Detección de picos
     function detectHeartbeat() {
-      if (redHistory.length < 60) return;
+      if (redHistory.length < 50) return;
 
       const values = redHistory.map(d => d.val);
       const max = Math.max(...values);
@@ -488,7 +513,7 @@
         const now = latest.time;
         if (lastBeatTime > 0) {
           const delta = now - lastBeatTime;
-          if (delta > 450 && delta < 1300) { // Entre 46 y 133 BPM
+          if (delta > 450 && delta < 1300) {
             const instantBPM = Math.round(60000 / delta);
             currentBPM = currentBPM === 0 ? instantBPM : Math.round(currentBPM * 0.7 + instantBPM * 0.3);
             updateBiofeedbackUI(currentBPM);
@@ -498,23 +523,19 @@
       }
     }
 
-    // Actualizar Interfaz y Esfera
     function updateBiofeedbackUI(bpm) {
       bpmDisplay.textContent = bpm;
 
       if (bpm <= 70) {
-        // En Zona Objetivo (Flota)
         bioOrb.className = "orb floating";
         zoneStatus.textContent = "Autorregulación Sostenida (En Zona)";
         zoneStatus.style.color = "#00f2fe";
         wasOutOfZone = false;
       } else {
-        // Fuera de Zona (Cae)
         bioOrb.className = "orb dropping";
         zoneStatus.textContent = "Frecuencia Elevada (> 70 BPM)";
         zoneStatus.style.color = "#f43f5e";
 
-        // Emitir tono si acaba de salir de zona
         if (!wasOutOfZone) {
           playAlertSound();
           wasOutOfZone = true;
@@ -522,26 +543,26 @@
       }
     }
 
-    // Alerta Sonora (Web Audio API)
     function playAlertSound() {
       if (!audioCtx) return;
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
+      try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
 
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(380, audioCtx.currentTime); // Tono suave 380Hz
-      
-      gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(380, audioCtx.currentTime);
+        
+        gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
 
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
 
-      osc.start();
-      osc.stop(audioCtx.currentTime + 0.5);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.5);
+      } catch(e) {}
     }
 
-    // Reloj de Sesión
     function tickTimer() {
       if (!isRunning) return;
 
@@ -559,13 +580,11 @@
       }
     }
 
-    // Detener Sesión y Reporte
     function stopSession(completed = false) {
       isRunning = false;
       clearInterval(timerInterval);
       clearInterval(ppgInterval);
 
-      // Apagar Cámara y Flash
       if (stream) {
         stream.getTracks().forEach(track => track.stop());
         stream = null;
@@ -573,6 +592,8 @@
 
       btnToggle.textContent = 'Iniciar Sesión';
       btnToggle.classList.remove('active');
+      visorPlaceholder.style.display = 'flex';
+      visorHint.textContent = 'Presiona "Iniciar Sesión" y cubre el lente con tu dedo índice';
       bioOrb.className = "orb";
       bpmDisplay.textContent = "--";
 
@@ -581,7 +602,6 @@
       }
     }
 
-    // Mostrar Reporte Final
     function showReport() {
       const percentage = totalMeasuredSeconds > 0 
         ? Math.round((secondsInTargetZone / totalMeasuredSeconds) * 100) 

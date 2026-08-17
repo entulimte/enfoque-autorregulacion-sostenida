@@ -26,13 +26,14 @@
       height: 100%;
       background-color: var(--bg-color);
       color: var(--text-color);
+      overflow-x: hidden;
     }
 
     body {
       display: flex;
       flex-direction: column;
-      padding: 10px;
-      gap: 8px;
+      padding: 12px;
+      gap: 10px;
     }
 
     /* Header Compacto */
@@ -40,7 +41,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: 2px;
+      padding-bottom: 4px;
       border-bottom: 1px solid #334155;
     }
 
@@ -64,7 +65,7 @@
     }
 
     label {
-      font-size: 0.75rem;
+      font-size: 0.8rem;
       color: var(--text-muted);
     }
 
@@ -72,9 +73,9 @@
       background: var(--card-bg);
       color: var(--text-color);
       border: 1px solid #334155;
-      padding: 3px 6px;
+      padding: 4px 8px;
       border-radius: 6px;
-      font-size: 0.75rem;
+      font-size: 0.8rem;
     }
 
     .mini-visor {
@@ -88,8 +89,8 @@
     }
 
     .camera-frame {
-      width: 24px;
-      height: 24px;
+      width: 26px;
+      height: 26px;
       border-radius: 50%;
       border: 2px solid var(--accent-color);
       overflow: hidden;
@@ -103,7 +104,7 @@
     }
 
     .visor-label {
-      font-size: 0.65rem;
+      font-size: 0.7rem;
       color: var(--text-muted);
     }
 
@@ -111,32 +112,31 @@
     .stage-card {
       background: var(--card-bg);
       width: 100%;
-      flex: 1;
-      border-radius: 12px;
+      min-height: 220px;
+      border-radius: 16px;
       position: relative;
       overflow: hidden;
       display: flex;
       justify-content: center;
       align-items: center;
       border: 1px solid #334155;
-      min-height: 220px;
     }
 
     .zone-indicator {
       position: absolute;
-      top: 10px;
-      font-size: 0.75rem;
+      top: 12px;
+      font-size: 0.8rem;
       font-weight: 600;
-      padding: 4px 10px;
-      border-radius: 15px;
+      padding: 6px 12px;
+      border-radius: 20px;
       background: rgba(15, 23, 42, 0.85);
       text-align: center;
       border: 1px solid #334155;
     }
 
     .orb {
-      width: 70px;
-      height: 70px;
+      width: 80px;
+      height: 80px;
       border-radius: 50%;
       background: radial-gradient(circle at 30% 30%, #ffffff, var(--accent-color));
       box-shadow: 0 0 25px var(--accent-color);
@@ -162,9 +162,9 @@
       background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
       color: #0f172a;
       border: none;
-      padding: 10px;
-      border-radius: 8px;
-      font-size: 0.95rem;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 1rem;
       font-weight: 700;
       cursor: pointer;
       width: 100%;
@@ -175,23 +175,23 @@
       color: #fff;
     }
 
-    /* Métricas Actuales */
+    /* Panel de Métricas */
     .metrics-grid {
       display: grid;
       grid-template-columns: 1fr 1fr 1.2fr;
-      gap: 6px;
+      gap: 8px;
     }
 
     .metric-box {
       background: var(--card-bg);
-      padding: 6px;
-      border-radius: 6px;
+      padding: 8px;
+      border-radius: 8px;
       text-align: center;
       border: 1px solid #334155;
     }
 
     .metric-val {
-      font-size: 1rem;
+      font-size: 1.1rem;
       font-weight: 800;
       color: var(--text-color);
     }
@@ -201,31 +201,68 @@
     }
 
     .metric-lbl {
-      font-size: 0.6rem;
+      font-size: 0.65rem;
       color: var(--text-muted);
       text-transform: uppercase;
     }
 
-    /* REGISTRO ÚLTIMO RESULTADO (Fijo al final) */
-    .last-result-card {
+    /* Sección Histórico de Registros */
+    .history-card {
       background: var(--card-bg);
-      border: 1px dashed #334155;
-      border-radius: 8px;
-      padding: 8px 10px;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .history-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
-    .last-result-title {
-      font-size: 0.7rem;
+    .history-title {
+      font-size: 0.75rem;
       color: var(--text-muted);
       text-transform: uppercase;
-      font-weight: 600;
+      font-weight: 700;
     }
 
-    .last-result-data {
-      font-size: 0.85rem;
+    .btn-clear {
+      background: transparent;
+      border: none;
+      color: var(--danger-color);
+      font-size: 0.7rem;
+      cursor: pointer;
+    }
+
+    .history-list {
+      max-height: 120px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(15, 23, 42, 0.6);
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      border: 1px solid #334155;
+    }
+
+    .history-item-date {
+      color: var(--text-muted);
+      font-size: 0.7rem;
+    }
+
+    .history-item-val {
       font-weight: 700;
       color: var(--accent-color);
     }
@@ -237,7 +274,7 @@
 
   <header>
     <h1>Autorregulación Sostenida</h1>
-    <span style="font-size:0.65rem; color:var(--text-muted)">Biofeedback</span>
+    <span style="font-size:0.7rem; color:var(--text-muted)">Biofeedback</span>
   </header>
 
   <div class="top-bar">
@@ -259,7 +296,7 @@
     </div>
   </div>
 
-  <!-- Cuadro Central de Trabajo -->
+  <!-- Zona Central Trabajo -->
   <div class="stage-card">
     <div id="zone-status" class="zone-indicator">Zona: ≤ 70 BPM (Atención Interna Estrecha)</div>
     <div id="bio-orb" class="orb"></div>
@@ -267,7 +304,7 @@
 
   <button id="btn-toggle" class="btn-main">Iniciar Sesión</button>
 
-  <!-- Panel de Métricas en Vivo -->
+  <!-- Métricas en Vivo -->
   <div class="metrics-grid">
     <div class="metric-box">
       <div id="bpm-display" class="metric-val">--</div>
@@ -283,10 +320,15 @@
     </div>
   </div>
 
-  <!-- RESULTADO DE LA ÚLTIMA SESIÓN (Fijo abajo para comparar) -->
-  <div class="last-result-card">
-    <span class="last-result-title">Último Resultado:</span>
-    <span id="last-result-display" class="last-result-data">Sin registro previo</span>
+  <!-- Panel de Histórico de Sesiones -->
+  <div class="history-card">
+    <div class="history-header">
+      <span class="history-title">Histórico de Sesiones</span>
+      <button id="btn-clear-history" class="btn-clear">Borrar Histórico</button>
+    </div>
+    <div id="history-list" class="history-list">
+      <div style="font-size:0.75rem; color:var(--text-muted); text-align:center;">Sin sesiones registradas</div>
+    </div>
   </div>
 
   <canvas id="ppg-canvas" width="60" height="60"></canvas>
@@ -306,8 +348,8 @@
     let currentBPM = 0;
     let wasOutOfZone = false;
 
-    const redHistory = [];
-    const historySize = 90;
+    let redHistory = [];
+    const historySize = 60;
     let lastBeatTime = 0;
 
     const btnToggle = document.getElementById('btn-toggle');
@@ -318,9 +360,13 @@
     const targetPercentDisplay = document.getElementById('target-percent-display');
     const bioOrb = document.getElementById('bio-orb');
     const zoneStatus = document.getElementById('zone-status');
-    const lastResultDisplay = document.getElementById('last-result-display');
+    const historyList = document.getElementById('history-list');
+    const btnClearHistory = document.getElementById('btn-clear-history');
     const canvas = document.getElementById('ppg-canvas');
     const ctx = canvas.getContext('2d', { willReadFrequently: true });
+
+    // Cargar Histórico Guardado
+    loadHistoryUI();
 
     selectDuration.addEventListener('change', () => {
       if (!isRunning) {
@@ -342,6 +388,11 @@
       } else {
         stopSession();
       }
+    });
+
+    btnClearHistory.addEventListener('click', () => {
+      localStorage.removeItem('biofeedback_history');
+      loadHistoryUI();
     });
 
     async function startSession() {
@@ -373,6 +424,8 @@
         totalMeasuredSeconds = 0;
         wasOutOfZone = false;
         currentBPM = 0;
+        redHistory = [];
+        lastBeatTime = 0;
 
         isRunning = true;
         btnToggle.textContent = 'Detener Sesión';
@@ -380,12 +433,13 @@
 
         updateTimerDisplay();
         targetPercentDisplay.textContent = "0%";
+        bpmDisplay.textContent = "--";
         
         timerInterval = setInterval(tickTimer, 1000);
-        ppgInterval = setInterval(processPPGFrame, 33);
+        ppgInterval = setInterval(processPPGFrame, 30);
 
       } catch (err) {
-        alert("Otorga permisos de cámara para la evaluación.");
+        alert("Otorga permisos de cámara para continuar.");
       }
     }
 
@@ -402,9 +456,9 @@
 
       const avgRed = redSum / (frameData.length / 4);
       
-      if (avgRed < 40) {
+      if (avgRed < 30) {
         bpmDisplay.textContent = "--";
-        zoneStatus.textContent = "Cubre el lente y el flash con tu dedo";
+        zoneStatus.textContent = "Cubre la cámara y el flash con tu dedo";
         return;
       }
 
@@ -415,12 +469,12 @@
     }
 
     function detectHeartbeat() {
-      if (redHistory.length < 30) return;
+      if (redHistory.length < 20) return;
 
       const values = redHistory.map(d => d.val);
       const max = Math.max(...values);
       const min = Math.min(...values);
-      const threshold = min + (max - min) * 0.65;
+      const threshold = min + (max - min) * 0.55;
 
       const latest = redHistory[redHistory.length - 1];
       const previous = redHistory[redHistory.length - 2];
@@ -429,9 +483,9 @@
         const now = latest.time;
         if (lastBeatTime > 0) {
           const delta = now - lastBeatTime;
-          if (delta > 450 && delta < 1300) {
+          if (delta > 400 && delta < 1500) {
             const instantBPM = Math.round(60000 / delta);
-            currentBPM = currentBPM === 0 ? instantBPM : Math.round(currentBPM * 0.6 + instantBPM * 0.4);
+            currentBPM = currentBPM === 0 ? instantBPM : Math.round(currentBPM * 0.7 + instantBPM * 0.3);
             updateBiofeedbackUI(currentBPM);
           }
         }
@@ -510,12 +564,12 @@
         stream = null;
       }
 
-      // Guardar resultado final de la sesión realizada para comparación
       if (totalMeasuredSeconds > 0) {
         const pctFinal = Math.round((secondsInTargetZone / totalMeasuredSeconds) * 100);
         const mins = Math.floor(totalMeasuredSeconds / 60);
         const secs = totalMeasuredSeconds % 60;
-        lastResultDisplay.textContent = `${pctFinal}% en zona (${mins}m ${secs}s)`;
+        
+        saveSessionToHistory(pctFinal, `${mins}m ${secs}s`);
       }
 
       btnToggle.textContent = 'Iniciar Sesión';
@@ -524,6 +578,35 @@
       bpmDisplay.textContent = "--";
       zoneStatus.textContent = "Zona: ≤ 70 BPM (Atención Interna Estrecha)";
       zoneStatus.style.color = "#f8fafc";
+    }
+
+    function saveSessionToHistory(pct, durationStr) {
+      const history = JSON.parse(localStorage.getItem('biofeedback_history') || '[]');
+      const now = new Date();
+      const dateStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')} - ${now.getDate()}/${now.getMonth()+1}`;
+
+      history.unshift({ date: dateStr, pct: pct, duration: durationStr });
+      localStorage.setItem('biofeedback_history', JSON.stringify(history));
+
+      loadHistoryUI();
+    }
+
+    function loadHistoryUI() {
+      const history = JSON.parse(localStorage.getItem('biofeedback_history') || '[]');
+      if (history.length === 0) {
+        historyList.innerHTML = `<div style="font-size:0.75rem; color:var(--text-muted); text-align:center;">Sin sesiones registradas</div>`;
+        return;
+      }
+
+      historyList.innerHTML = history.map((item, idx) => `
+        <div class="history-item">
+          <div>
+            <div>Sesión ${history.length - idx}</div>
+            <div class="history-item-date">${item.date} (${item.duration})</div>
+          </div>
+          <div class="history-item-val">${item.pct}% en zona</div>
+        </div>
+      `).join('');
     }
   </script>
 </body>

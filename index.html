@@ -31,8 +31,8 @@
     body {
       display: flex;
       flex-direction: column;
-      padding: 8px 10px;
-      gap: 6px;
+      padding: 10px;
+      gap: 8px;
     }
 
     /* Header Compacto */
@@ -45,7 +45,7 @@
     }
 
     h1 {
-      font-size: 0.95rem;
+      font-size: 1rem;
       font-weight: 700;
       color: var(--accent-color);
     }
@@ -60,7 +60,7 @@
     .selector-group {
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
     }
 
     label {
@@ -80,9 +80,9 @@
     .mini-visor {
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
       background: var(--card-bg);
-      padding: 2px 6px;
+      padding: 3px 8px;
       border-radius: 15px;
       border: 1px solid #334155;
     }
@@ -107,11 +107,11 @@
       color: var(--text-muted);
     }
 
-    /* Cuadro Esfera */
+    /* Zona Principal de Trabajo */
     .stage-card {
       background: var(--card-bg);
       width: 100%;
-      height: 150px;
+      flex: 1;
       border-radius: 12px;
       position: relative;
       overflow: hidden;
@@ -119,55 +119,55 @@
       justify-content: center;
       align-items: center;
       border: 1px solid #334155;
-      flex-shrink: 0;
+      min-height: 220px;
     }
 
     .zone-indicator {
       position: absolute;
-      top: 6px;
-      font-size: 0.7rem;
+      top: 10px;
+      font-size: 0.75rem;
       font-weight: 600;
-      padding: 3px 8px;
-      border-radius: 10px;
-      background: rgba(15, 23, 42, 0.75);
+      padding: 4px 10px;
+      border-radius: 15px;
+      background: rgba(15, 23, 42, 0.85);
       text-align: center;
+      border: 1px solid #334155;
     }
 
     .orb {
-      width: 55px;
-      height: 55px;
+      width: 70px;
+      height: 70px;
       border-radius: 50%;
       background: radial-gradient(circle at 30% 30%, #ffffff, var(--accent-color));
-      box-shadow: 0 0 20px var(--accent-color);
+      box-shadow: 0 0 25px var(--accent-color);
       position: absolute;
-      top: 60%;
+      top: 65%;
       transition: top 0.8s cubic-bezier(0.4, 0, 0.2, 1), background 0.5s, box-shadow 0.5s;
     }
 
     .orb.floating {
-      top: 20%;
+      top: 25%;
       background: radial-gradient(circle at 30% 30%, #ffffff, #00f2fe);
-      box-shadow: 0 0 30px #00f2fe;
+      box-shadow: 0 0 35px #00f2fe;
     }
 
     .orb.dropping {
-      top: 65%;
+      top: 70%;
       background: radial-gradient(circle at 30% 30%, #ffffff, #f43f5e);
-      box-shadow: 0 0 18px #f43f5e;
+      box-shadow: 0 0 20px #f43f5e;
     }
 
-    /* Botón Iniciar abajo de la bolita */
+    /* Botón Iniciar */
     .btn-main {
       background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
       color: #0f172a;
       border: none;
-      padding: 9px;
+      padding: 10px;
       border-radius: 8px;
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       font-weight: 700;
       cursor: pointer;
       width: 100%;
-      flex-shrink: 0;
     }
 
     .btn-main.active {
@@ -175,17 +175,16 @@
       color: #fff;
     }
 
-    /* Métricas Generales */
+    /* Métricas Actuales */
     .metrics-grid {
       display: grid;
       grid-template-columns: 1fr 1fr 1.2fr;
-      gap: 5px;
-      flex-shrink: 0;
+      gap: 6px;
     }
 
     .metric-box {
       background: var(--card-bg);
-      padding: 5px;
+      padding: 6px;
       border-radius: 6px;
       text-align: center;
       border: 1px solid #334155;
@@ -202,60 +201,36 @@
     }
 
     .metric-lbl {
-      font-size: 0.58rem;
+      font-size: 0.6rem;
       color: var(--text-muted);
       text-transform: uppercase;
     }
 
-    /* SECCIÓN HISTÓRICO GARANTIZADA VISIBLE */
-    .history-card {
+    /* REGISTRO ÚLTIMO RESULTADO (Fijo al final) */
+    .last-result-card {
       background: var(--card-bg);
-      width: 100%;
+      border: 1px dashed #334155;
       border-radius: 8px;
-      border: 1px solid #334155;
-      padding: 6px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .history-header {
-      font-size: 0.65rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: var(--accent-color);
-      font-weight: 700;
-    }
-
-    .history-list {
-      height: 120px; /* Altura Fija Visible */
-      overflow-y: scroll;
-      background: var(--bg-color);
-      border-radius: 4px;
-      padding: 4px;
-      border: 1px solid #334155;
-      font-family: monospace;
-      font-size: 0.7rem;
-    }
-
-    .history-row {
+      padding: 8px 10px;
       display: flex;
       justify-content: space-between;
-      padding: 3px 6px;
-      border-bottom: 1px solid #1e293b;
+      align-items: center;
     }
 
-    .history-row.in-zone {
-      color: #00f2fe;
+    .last-result-title {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 600;
     }
 
-    .history-row.out-zone {
-      color: #f43f5e;
+    .last-result-data {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--accent-color);
     }
 
-    canvas#ppg-canvas {
-      display: none;
-    }
+    canvas#ppg-canvas { display: none; }
   </style>
 </head>
 <body>
@@ -284,16 +259,15 @@
     </div>
   </div>
 
-  <!-- Cuadro Central de la Bolita -->
+  <!-- Cuadro Central de Trabajo -->
   <div class="stage-card">
     <div id="zone-status" class="zone-indicator">Zona: ≤ 70 BPM (Atención Interna Estrecha)</div>
     <div id="bio-orb" class="orb"></div>
   </div>
 
-  <!-- Botón Iniciar Sesión justo abajo del cuadro de la bolita -->
   <button id="btn-toggle" class="btn-main">Iniciar Sesión</button>
 
-  <!-- Panel de Métricas Rápidas -->
+  <!-- Panel de Métricas en Vivo -->
   <div class="metrics-grid">
     <div class="metric-box">
       <div id="bpm-display" class="metric-val">--</div>
@@ -309,14 +283,10 @@
     </div>
   </div>
 
-  <!-- CUADRO DE RESULTADOS HISTÓRICOS (SIEMPRE VISIBLE ABAJO) -->
-  <div class="history-card">
-    <div class="history-header">Histórico de Lecturas (En Vivo)</div>
-    <div id="history-container" class="history-list">
-      <div id="empty-msg" style="color: var(--text-muted); text-align: center; padding-top: 20px;">
-        Presiona "Iniciar Sesión" para generar el histórico...
-      </div>
-    </div>
+  <!-- RESULTADO DE LA ÚLTIMA SESIÓN (Fijo abajo para comparar) -->
+  <div class="last-result-card">
+    <span class="last-result-title">Último Resultado:</span>
+    <span id="last-result-display" class="last-result-data">Sin registro previo</span>
   </div>
 
   <canvas id="ppg-canvas" width="60" height="60"></canvas>
@@ -348,7 +318,7 @@
     const targetPercentDisplay = document.getElementById('target-percent-display');
     const bioOrb = document.getElementById('bio-orb');
     const zoneStatus = document.getElementById('zone-status');
-    const historyContainer = document.getElementById('history-container');
+    const lastResultDisplay = document.getElementById('last-result-display');
     const canvas = document.getElementById('ppg-canvas');
     const ctx = canvas.getContext('2d', { willReadFrequently: true });
 
@@ -384,40 +354,29 @@
         }
 
         stream = await navigator.mediaDevices.getUserMedia({
-          video: { 
-            facingMode: "environment",
-            width: { ideal: 320 },
-            height: { ideal: 240 }
-          }
+          video: { facingMode: "environment", width: { ideal: 320 }, height: { ideal: 240 } }
         });
 
         videoPreview.srcObject = stream;
         await videoPreview.play();
 
-        // ACTIVACIÓN DE FLASH / TORCH MULTIPLATAFORMA
         try {
           const track = stream.getVideoTracks()[0];
           if (track && track.applyConstraints) {
-            await track.applyConstraints({
-              advanced: [{ torch: true }]
-            });
+            await track.applyConstraints({ advanced: [{ torch: true }] });
           }
-        } catch (e) {
-          console.warn("Flash no soportado en este navegador:", e);
-        }
+        } catch (e) {}
 
         totalSessionSeconds = parseInt(selectDuration.value) * 60;
         secondsRemaining = totalSessionSeconds;
         secondsInTargetZone = 0;
         totalMeasuredSeconds = 0;
         wasOutOfZone = false;
-        
+        currentBPM = 0;
+
         isRunning = true;
         btnToggle.textContent = 'Detener Sesión';
         btnToggle.classList.add('active');
-
-        // Limpiar el aviso inicial
-        historyContainer.innerHTML = '';
 
         updateTimerDisplay();
         targetPercentDisplay.textContent = "0%";
@@ -508,7 +467,6 @@
 
         osc.type = 'sine';
         osc.frequency.setValueAtTime(380, audioCtx.currentTime);
-        
         gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
 
@@ -535,33 +493,11 @@
         targetPercentDisplay.textContent = `${pct}%`;
       }
 
-      // INSERTAR EN EL HISTORIAL SEGUNDO A SEGUNDO
-      appendHistoryRecord(totalMeasuredSeconds, currentBPM);
-
       updateTimerDisplay();
 
       if (secondsRemaining <= 0) {
         stopSession();
       }
-    }
-
-    function appendHistoryRecord(elapsedSecs, bpm) {
-      const mins = Math.floor(elapsedSecs / 60).toString().padStart(2, '0');
-      const secs = (elapsedSecs % 60).toString().padStart(2, '0');
-      const timeStr = `${mins}:${secs}`;
-      const hasReading = bpm > 0;
-      const inZone = hasReading && bpm <= 70;
-
-      const row = document.createElement('div');
-      row.className = `history-row ${inZone ? 'in-zone' : (hasReading ? 'out-zone' : '')}`;
-      row.innerHTML = `
-        <span>T: ${timeStr}</span>
-        <span>${hasReading ? bpm + ' BPM' : 'Detectando...'}</span>
-        <span>${hasReading ? (inZone ? 'EN ZONA' : 'FUERA') : '--'}</span>
-      `;
-
-      // Se inserta en la parte superior del listado
-      historyContainer.insertBefore(row, historyContainer.firstChild);
     }
 
     function stopSession() {
@@ -572,6 +508,14 @@
       if (stream) {
         stream.getTracks().forEach(track => track.stop());
         stream = null;
+      }
+
+      // Guardar resultado final de la sesión realizada para comparación
+      if (totalMeasuredSeconds > 0) {
+        const pctFinal = Math.round((secondsInTargetZone / totalMeasuredSeconds) * 100);
+        const mins = Math.floor(totalMeasuredSeconds / 60);
+        const secs = totalMeasuredSeconds % 60;
+        lastResultDisplay.textContent = `${pctFinal}% en zona (${mins}m ${secs}s)`;
       }
 
       btnToggle.textContent = 'Iniciar Sesión';

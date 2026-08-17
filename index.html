@@ -24,7 +24,7 @@
     html, body {
       width: 100%;
       height: 100%;
-      overflow: hidden; /* Cero scroll en móvil */
+      overflow: hidden;
       background-color: var(--bg-color);
       color: var(--text-color);
     }
@@ -51,7 +51,7 @@
       color: var(--accent-color);
     }
 
-    /* Barra Superior Ultra Compacta (Duración + Visor Dedo) */
+    /* Barra Superior Ultra Compacta */
     .top-bar {
       display: flex;
       align-items: center;
@@ -115,7 +115,7 @@
     .stage-card {
       background: var(--card-bg);
       width: 100%;
-      flex-grow: 1;
+      height: 180px;
       margin: 6px 0;
       border-radius: 16px;
       position: relative;
@@ -124,6 +124,7 @@
       justify-content: center;
       align-items: center;
       border: 1px solid #334155;
+      flex-shrink: 0;
     }
 
     .zone-indicator {
@@ -139,8 +140,8 @@
     }
 
     .orb {
-      width: 70px;
-      height: 70px;
+      width: 65px;
+      height: 65px;
       border-radius: 50%;
       background: radial-gradient(circle at 30% 30%, #ffffff, var(--accent-color));
       box-shadow: 0 0 25px var(--accent-color);
@@ -156,12 +157,12 @@
     }
 
     .orb.dropping {
-      top: 70%;
+      top: 68%;
       background: radial-gradient(circle at 30% 30%, #ffffff, #f43f5e);
       box-shadow: 0 0 20px #f43f5e;
     }
 
-    /* Botón Iniciar Sesión (Abajo de la Bolita) */
+    /* Botón Iniciar Sesión abajo de la Bolita */
     .btn-main {
       background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
       color: #0f172a;
@@ -172,8 +173,8 @@
       font-weight: 700;
       cursor: pointer;
       width: 100%;
-      margin-bottom: 8px;
-      transition: opacity 0.2s;
+      margin-bottom: 6px;
+      flex-shrink: 0;
     }
 
     .btn-main.active {
@@ -181,30 +182,25 @@
       color: #fff;
     }
 
-    /* Cuadro Inferior con Histórico y Resultados */
+    /* Panel Inferior: Métricas + Histórico Acumulado */
     .results-card {
       background: var(--card-bg);
       width: 100%;
-      padding: 10px;
+      flex-grow: 1;
+      padding: 8px 10px;
       border-radius: 12px;
       border: 1px solid #334155;
       display: flex;
       flex-direction: column;
       gap: 6px;
-    }
-
-    .results-title {
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: var(--accent-color);
-      font-weight: 700;
+      min-height: 0; /* Permite scroll interno si es necesario */
     }
 
     .metrics-grid {
       display: grid;
       grid-template-columns: 1fr 1fr 1.3fr;
       gap: 6px;
+      flex-shrink: 0;
     }
 
     .metric-box {
@@ -215,7 +211,7 @@
     }
 
     .metric-val {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       font-weight: 800;
       color: var(--text-color);
     }
@@ -225,10 +221,47 @@
     }
 
     .metric-lbl {
-      font-size: 0.62rem;
+      font-size: 0.6rem;
       color: var(--text-muted);
       text-transform: uppercase;
       margin-top: 1px;
+    }
+
+    /* Tabla de Histórico Generado en Tiempo Real */
+    .history-header {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--accent-color);
+      font-weight: 700;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    .history-list {
+      flex-grow: 1;
+      overflow-y: auto;
+      background: var(--bg-color);
+      border-radius: 6px;
+      padding: 4px;
+      border: 1px solid #334155;
+      font-family: monospace;
+      font-size: 0.72rem;
+    }
+
+    .history-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 3px 6px;
+      border-bottom: 1px solid #1e293b;
+    }
+
+    .history-row.in-zone {
+      color: #00f2fe;
+    }
+
+    .history-row.out-zone {
+      color: #f43f5e;
     }
 
     canvas#ppg-canvas {
@@ -244,7 +277,7 @@
     <span style="font-size:0.68rem; color:var(--text-muted)">Biofeedback Cardio-Atencional</span>
   </header>
 
-  <!-- Barra Superior (Configuración + Visor Micro) -->
+  <!-- Barra Superior -->
   <div class="top-bar">
     <div class="selector-group">
       <label for="session-duration">Sesión:</label>
@@ -264,18 +297,17 @@
     </div>
   </div>
 
-  <!-- Cuadro Central de la Bolita Flotante -->
+  <!-- Cuadro Central de la Bolita -->
   <div class="stage-card">
     <div id="zone-status" class="zone-indicator">Zona: ≤ 70 BPM (Atención Interna Estrecha)</div>
     <div id="bio-orb" class="orb"></div>
   </div>
 
-  <!-- Botón Iniciar Sesión abajo del Cuadro de la Bolita -->
+  <!-- Botón Iniciar abajo de la Bolita -->
   <button id="btn-toggle" class="btn-main">Iniciar Sesión</button>
 
-  <!-- Anexo Inferior de Resultados e Histórico -->
+  <!-- Anexo Inferior: Resultados e Histórico Acumulado -->
   <div class="results-card">
-    <div class="results-title">Resultados de Evaluación</div>
     <div class="metrics-grid">
       <div class="metric-box">
         <div id="bpm-display" class="metric-val">--</div>
@@ -289,7 +321,14 @@
 
       <div class="metric-box">
         <div id="target-percent-display" class="metric-val accent">0%</div>
-        <div class="metric-lbl">% En Zona (≤70 BPM)</div>
+        <div class="metric-lbl">% En Zona</div>
+      </div>
+    </div>
+
+    <div class="history-header">Histórico de Lecturas (En Vivo)</div>
+    <div id="history-container" class="history-list">
+      <div style="color: var(--text-muted); text-align: center; padding-top: 10px;">
+        Inicia la sesión para comenzar a registrar lecturas...
       </div>
     </div>
   </div>
@@ -323,6 +362,7 @@
     const targetPercentDisplay = document.getElementById('target-percent-display');
     const bioOrb = document.getElementById('bio-orb');
     const zoneStatus = document.getElementById('zone-status');
+    const historyContainer = document.getElementById('history-container');
     const canvas = document.getElementById('ppg-canvas');
     const ctx = canvas.getContext('2d', { willReadFrequently: true });
 
@@ -357,22 +397,30 @@
           await audioCtx.resume();
         }
 
+        // Solicitar acceso a la cámara trasera
         stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: "environment" }
+          video: { 
+            facingMode: "environment",
+            width: { ideal: 320 },
+            height: { ideal: 240 }
+          }
         });
 
         videoPreview.srcObject = stream;
         await videoPreview.play();
 
+        // ACTIVACIÓN FORZADA DEL FLASH (TORCH)
         try {
           const track = stream.getVideoTracks()[0];
-          if (track && typeof track.getCapabilities === 'function') {
-            const capabilities = track.getCapabilities();
+          if (track) {
+            const capabilities = track.getCapabilities ? track.getCapabilities() : {};
             if (capabilities.torch) {
               await track.applyConstraints({ advanced: [{ torch: true }] });
             }
           }
-        } catch (e) {}
+        } catch (e) {
+          console.warn("No se pudo activar el flash automáticamente:", e);
+        }
 
         totalSessionSeconds = parseInt(selectDuration.value) * 60;
         secondsRemaining = totalSessionSeconds;
@@ -384,6 +432,8 @@
         btnToggle.textContent = 'Detener Sesión';
         btnToggle.classList.add('active');
 
+        historyContainer.innerHTML = ''; // Limpiar histórico anterior
+
         updateTimerDisplay();
         targetPercentDisplay.textContent = "0%";
         
@@ -391,7 +441,7 @@
         ppgInterval = setInterval(processPPGFrame, 33);
 
       } catch (err) {
-        alert("Otorga permisos de cámara para continuar.");
+        alert("Otorga permisos de cámara para activar la medición.");
       }
     }
 
@@ -408,7 +458,7 @@
 
       const avgRed = redSum / (frameData.length / 4);
       
-      if (avgRed < 45) {
+      if (avgRed < 40) {
         bpmDisplay.textContent = "--";
         zoneStatus.textContent = "Cubre el lente y flash con tu dedo";
         return;
@@ -500,11 +550,33 @@
         targetPercentDisplay.textContent = `${pct}%`;
       }
 
+      // Registrar punto en el histórico cada segundo si hay lectura
+      if (currentBPM > 0) {
+        appendHistoryRecord(totalMeasuredSeconds, currentBPM);
+      }
+
       updateTimerDisplay();
 
       if (secondsRemaining <= 0) {
         stopSession();
       }
+    }
+
+    function appendHistoryRecord(elapsedSecs, bpm) {
+      const mins = Math.floor(elapsedSecs / 60).toString().padStart(2, '0');
+      const secs = (elapsedSecs % 60).toString().padStart(2, '0');
+      const timeStr = `${mins}:${secs}`;
+      const inZone = bpm <= 70;
+
+      const row = document.createElement('div');
+      row.className = `history-row ${inZone ? 'in-zone' : 'out-zone'}`;
+      row.innerHTML = `
+        <span>T: ${timeStr}</span>
+        <span>${bpm} BPM</span>
+        <span>${inZone ? 'EN ZONA' : 'FUERA'}</span>
+      `;
+
+      historyContainer.insertBefore(row, historyContainer.firstChild); // Añade el más reciente arriba
     }
 
     function stopSession() {
